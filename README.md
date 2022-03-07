@@ -1,1 +1,1 @@
-# playz_rust_api
+# rustapi
