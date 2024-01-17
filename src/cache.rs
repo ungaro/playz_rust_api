@@ -6,56 +6,38 @@ use R2D2Error::*;
 type Result<T> = std::result::Result<T, Error>;
 use r2d2_redis::redis::{Commands, FromRedisValue};
 
-//use r2d2_redis_cluster::{r2d2::Pool, RedisClusterConnectionManager};
-
-
-
-
-
-//pub type R2D2Pool<T> = r2d2::Pool<T>;
-//pub type R2D2Con<T> = r2d2::PooledConnection<T>;
-
 pub type R2D2Pool = r2d2::Pool<RedisConnectionManager>;
 pub type R2D2Con = r2d2::PooledConnection<RedisConnectionManager>;
-
 
 const CACHE_POOL_MAX_OPEN: u32 = 16;
 const CACHE_POOL_MIN_IDLE: u32 = 8;
 const CACHE_POOL_TIMEOUT_SECONDS: u64 = 1;
 const CACHE_POOL_EXPIRE_SECONDS: u64 = 60;
 
-    //pub fn init()<T> -> Result<r2d2::Pool<T>> {
-    pub fn connect() -> Result<r2d2::Pool<RedisConnectionManager>> {
+pub fn connect() -> Result<r2d2::Pool<RedisConnectionManager>> {
+    println!("connect_dotenv_REDIS_URL__{}", dotenv!("REDIS_URL"));
 
-        println!("connect_dotenv_REDIS_URL__{}",dotenv!("REDIS_URL"));
-
-        let manager = RedisConnectionManager::new(dotenv!("REDIS_URL")).map_err(RedisClientError)?;
-        r2d2::Pool::builder()
+    let manager = RedisConnectionManager::new(dotenv!("REDIS_URL")).map_err(RedisClientError)?;
+    r2d2::Pool::builder()
         .max_size(CACHE_POOL_MAX_OPEN)
         .max_lifetime(Some(Duration::from_secs(CACHE_POOL_EXPIRE_SECONDS)))
         .min_idle(Some(CACHE_POOL_MIN_IDLE))
         .build(manager)
         .map_err(|e| RedisPoolError(e).into())
-    
-    
-
 }
 
 pub fn init() -> r2d2::Pool<RedisConnectionManager> {
     connect().expect("Redis_Error")
 }
 
-
-
 pub fn get_con(pool: &R2D2Pool) -> Result<R2D2Con> {
     println!("get_con_REDIS");
 
     pool.get_timeout(Duration::from_secs(CACHE_POOL_TIMEOUT_SECONDS))
-    .map_err(|e| {
-        eprintln!("error connecting to redis: {}", e);
-        RedisPoolError(e).into()
-    })
-       
+        .map_err(|e| {
+            eprintln!("error connecting to redis: {}", e);
+            RedisPoolError(e).into()
+        })
 }
 
 pub fn set_str(pool: &R2D2Pool, key: &str, value: &str, ttl_seconds: usize) -> Result<()> {
@@ -75,7 +57,6 @@ pub fn get_str(pool: &R2D2Pool, key: &str) -> Result<String> {
     FromRedisValue::from_redis_value(&value).map_err(|e| RedisTypeError(e).into())
 }
 
-
 #[derive(Error, Debug)]
 pub enum Error {
     #[error("direct redis error: {0}")]
@@ -83,8 +64,6 @@ pub enum Error {
     #[error("r2d2 error: {0}")]
     R2D2Error(#[from] R2D2Error),
 }
-
-
 
 #[derive(Error, Debug)]
 pub enum R2D2Error {

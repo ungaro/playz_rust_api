@@ -4,11 +4,6 @@ use chrono::NaiveDateTime;
 use diesel::MysqlConnection;
 use crate::model::customer::Customer;
  
-
-
-
-
-
 #[derive(Associations,Queryable, Serialize, Deserialize,QueryableByName,Debug,Clone)]
 #[table_name = "game"]
 pub struct Game {

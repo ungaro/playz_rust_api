@@ -28,8 +28,8 @@ table! {
         commentCount -> Nullable<Unsigned<Integer>>,
         tagCount -> Nullable<Unsigned<Integer>>,
         lastOnline -> Nullable<Unsigned<Bigint>>,
-       
-        
+
+
         gsm -> Nullable<Varchar>,
         sessionId -> Nullable<Varchar>,
         isFamous -> Nullable<Unsigned<Tinyint>>,
@@ -41,7 +41,7 @@ table! {
         taskLevel -> Nullable<Smallint>,
         firebaseToken -> Nullable<Varchar>,
          /* */
-     
+
     }
 }
 
@@ -68,8 +68,6 @@ table! {
         missionLevelString -> Nullable<Varchar>,
     }
 }
-
-
 
 table! {
     blockconnection (blocker, blocked) {
@@ -109,34 +107,6 @@ table! {
 }
 
 
-
-/*
-table! {
-    customerinformation (id) {
-        id -> Unsigned<Integer>,
-        customer -> Unsigned<Integer>,
-        photo -> Nullable<Varchar>,
-        address -> Nullable<Varchar>,
-        name -> Nullable<Tinytext>,
-        surname -> Nullable<Tinytext>,
-        birthday -> Nullable<Double>,
-        gender -> Nullable<Varchar>,
-        biography -> Nullable<Varchar>,
-        county -> Nullable<Unsigned<Integer>>,
-        city -> Nullable<Unsigned<Integer>>,
-        createdAt -> Unsigned<Bigint>,
-        updatedAt -> Unsigned<Bigint>,
-        refcode -> Nullable<Char>,
-        registerRefCode -> Nullable<Char>,
-        taskGroupId -> Integer,
-        missionLevel -> Nullable<Tinyint>,
-        missionSubLevel -> Nullable<Tinyint>,
-        missionLevelString -> Nullable<Varchar>,
-    }
-}
-*/
-
-
 table! {
     likeconnection (post, who) {
         post -> Varchar,
@@ -163,7 +133,6 @@ table! {
     }
 }
 
-
 table! {
     post (id) {
         id -> Unsigned<Integer>,
@@ -187,7 +156,6 @@ table! {
         updatedAt -> Unsigned<Bigint>,
     }
 }
-
 
 table! {
     asset (id) {
@@ -223,7 +191,6 @@ table! {
     }
 }
 
-
 table! {
     thumbnail (id) {
         id -> Unsigned<Integer>,
@@ -234,15 +201,6 @@ table! {
     }
 }
 
-
-
 //joinable!(thumbnail -> post_asset (asset));
 
-
-
-allow_tables_to_appear_in_same_query!(
-    customer,
-    post_asset,
-    thumbnail,
-    customerinformation,
-);
+allow_tables_to_appear_in_same_query!(customer, post_asset, thumbnail, customerinformation,);
